@@ -312,7 +312,7 @@ export const Application: React.FC = () => {
             <TlsUploadCard onToast={setToast} onInstalledPaths={onTlsInstalled} />
 
             <Card
-                style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)', marginTop: '1rem' }}
+                className="adsbcot-expandable-card"
                 isExpanded={isConfigExpanded}
                 data-testid="adsbcot-config-card"
             >
@@ -333,11 +333,13 @@ export const Application: React.FC = () => {
                 <CardExpandableContent>
                     {configLoadError && <Alert variant="warning" title={configLoadError} />}
                     <form onSubmit={handleEnvVarFormSubmit}>
-                        <DataList aria-label={_('Environment Variable Configuration')}>
-                            {Object.entries(CONF_PARAMS).map(([key, def]) => (
-                                <DataListItem key={key} aria-labelledby={`envvar-${key}`}>
-                                    <DataListItemRow>
-                                        <DataListItemCells
+                        <div className="adsbcot-config-form-layout" data-testid="adsbcot-config-form-layout">
+                            <div className="adsbcot-config-body-scroll" data-testid="adsbcot-config-scroll">
+                                <DataList aria-label={_('Environment Variable Configuration')}>
+                                    {Object.entries(CONF_PARAMS).map(([key, def]) => (
+                                        <DataListItem key={key} aria-labelledby={`envvar-${key}`}>
+                                            <DataListItemRow>
+                                                <DataListItemCells
                                             dataListCells={[
                                                 <DataListCell key="label">
                                                     <label htmlFor={`envvar-input-${key}`}>
@@ -420,32 +422,34 @@ export const Application: React.FC = () => {
                                                     )}
                                                 </DataListCell>,
                                             ]}
-                                        />
-                                    </DataListItemRow>
-                                </DataListItem>
-                            ))}
-                        </DataList>
-                        <div style={{ marginTop: '1em' }}>
-                            <Checkbox
+                                                />
+                                            </DataListItemRow>
+                                        </DataListItem>
+                                    ))}
+                                </DataList>
+                            </div>
+                            <div className="adsbcot-config-actions">
+                                <Checkbox
                                 id="adsbcot-save-restart"
                                 label={_('Restart adsbcot after save')}
                                 isChecked={saveAndRestart}
                                 onChange={(_ev, checked) => setSaveAndRestart(checked)}
-                            />
+                                />
+                                <button
+                                type="submit"
+                                className="pf-c-button pf-m-primary"
+                                style={{ marginTop: '1em', display: 'block' }}
+                                disabled={saveBusy}
+                                >
+                                    {saveBusy ? _('Saving…') : _('Validate & Save')}
+                                </button>
+                            </div>
                         </div>
-                        <button
-                            type="submit"
-                            className="pf-c-button pf-m-primary"
-                            style={{ marginTop: '1em', marginBottom: '2em' }}
-                            disabled={saveBusy}
-                        >
-                            {saveBusy ? _('Saving…') : _('Validate & Save')}
-                        </button>
                     </form>
                 </CardExpandableContent>
             </Card>
 
-            <Card isExpanded={isDebugExpanded} style={{ marginTop: '1rem' }}>
+            <Card className="adsbcot-expandable-card" isExpanded={isDebugExpanded}>
                 <CardHeader
                     className="ct-card-expandable-header"
                     onExpand={() => setIsDebugExpanded(!isDebugExpanded)}
@@ -511,7 +515,7 @@ export const Application: React.FC = () => {
                 </CardExpandableContent>
             </Card>
 
-            <Card isExpanded={isAdvancedExpanded} style={{ marginTop: '1rem' }}>
+            <Card className="adsbcot-expandable-card" isExpanded={isAdvancedExpanded}>
                 <CardHeader
                     className="ct-card-expandable-header"
                     onExpand={() => setIsAdvancedExpanded(!isAdvancedExpanded)}

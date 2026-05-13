@@ -115,7 +115,11 @@ export function TlsUploadCard({ onToast, onInstalledPaths }: TlsUploadCardProps)
     );
 
     return (
-        <Card isExpanded={expanded} data-testid="adsbcot-tls-card">
+        <Card
+            isExpanded={expanded}
+            className="adsbcot-expandable-card"
+            data-testid="adsbcot-tls-card"
+        >
             <CardHeader
                 className="ct-card-expandable-header"
                 onExpand={() => setExpanded(!expanded)}
