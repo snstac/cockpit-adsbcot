@@ -225,6 +225,7 @@ deb:
 	dpkg-deb -Zxz --build output/cockpit-$(PACKAGE_NAME)
 	mv "`pwd`/output/cockpit-$(PACKAGE_NAME).deb" \
 		"`pwd`/$(RPM_NAME)_$(VERSION)_all.deb"
+	cp -f "`pwd`/$(RPM_NAME)_$(VERSION)_all.deb" "`pwd`/$(RPM_NAME)_latest_all.deb"
 	rm -r "`pwd`/output"
 
 
