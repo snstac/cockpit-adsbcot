@@ -98,6 +98,16 @@ const context = await esbuild.context({
                 build.onEnd(() => {
                     fs.copyFileSync('./src/manifest.json', './dist/manifest.json');
                     fs.copyFileSync('./src/index.html', './dist/index.html');
+
+                    const srcAssets = path.join(
+                        'node_modules',
+                        '@patternfly',
+                        'patternfly',
+                        'assets'
+                    );
+                    const destAssets = path.join('dist', 'assets');
+                    fs.mkdirSync(destAssets, { recursive: true });
+                    fs.cpSync(srcAssets, destAssets, { recursive: true });
                 });
             }
         },
