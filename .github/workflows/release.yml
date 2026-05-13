@@ -1,83 +1,53 @@
-# Create a GitHub upstream release. Replace "TARNAME" with your project tarball
-# name and enable this by dropping the ".disabled" suffix from the file name.
-# See README.md.
-name: release
+# Tag a release with `v*` (e.g. v1.2.3) to build source tarball + .deb and publish GitHub Release assets.
+name: Release
 on:
   push:
     tags:
-      - 'v*' # Match semantic versioning tags like v1.2.3
+      - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
-  source:
+  release:
     runs-on: ubuntu-latest
-
-    permissions:
-      # create GitHub release
-      contents: write
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Debian Package Building Dependencies
-        run: make install_pkg_build_deps
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
 
-      - name: Pacify git's permission check per https://github.blog/2022-04-12-git-security-vulnerability-announced/
+      - name: Pacify git safe.directory
         run: git config --global --add safe.directory '*'
 
-      - name: Workaround for https://github.com/actions/checkout/pull/697
-        run: git fetch --force origin $(git describe --tags):refs/tags/$(git describe --tags)
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y dpkg-dev gettext
 
-      - name: Build release
-        run: make dist 
-        
-      - name: Make Debian Package
-        run: make deb
+      - name: Build distribution tarball and Debian package
+        env:
+          NODE_ENV: production
+        run: |
+          make dist
+          make deb
 
-      - name: List current directory and subdirectories
-        run: ls -alR
-      
-      - name: Upload Artifacts to GitHub
-        uses: actions/upload-artifact@master
+      - name: List release files
+        run: ls -la cockpit-adsbcot*.deb cockpit-adsbcot*.tar.xz
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: artifact-packages
-          path: |
-            *.deb
-            *.tar.xz
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@master
+          name: Release ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            cockpit-adsbcot-*.deb
+            cockpit-adsbcot-*.tar.xz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset1 to GitHub
-        id: upload-release-asset1
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./*.deb
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
-
-      - name: Upload Release Asset2 to GitHub
-        id: upload-release-asset2
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./*.tar.xz
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
-
-      # - name: Publish GitHub release
-      #   uses: cockpit-project/action-release@7d2e2657382e8d34f88a24b5987f2b81ea165785
-      #   with:
-      #     filename: "TARNAME-${{ github.ref_name }}.tar.xz"

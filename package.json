@@ -12,6 +12,8 @@
   "scripts": {
     "watch": "ESBUILD_WATCH='true' ./build.js",
     "build": "./build.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "eslint": "eslint src/",
     "eslint:fix": "eslint --fix src/",
     "stylelint": "stylelint src/*{.css,scss}",
@@ -43,7 +45,8 @@
     "stylelint-config-standard": "39.0.0",
     "stylelint-config-standard-scss": "15.0.1",
     "stylelint-formatter-pretty": "4.0.1",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@patternfly/patternfly": "6.1.0",

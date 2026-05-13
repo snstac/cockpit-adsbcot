@@ -60,5 +60,6 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*
 %license LICENSE dist/index.js.LEGAL.txt
 %{_datadir}/cockpit/*
 %{_datadir}/metainfo/*
+%{_datadir}/polkit-1/rules.d/49-cockpit-adsbcot.rules
 
 %changelog

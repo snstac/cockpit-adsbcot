@@ -1,4 +1,4 @@
-    // Type Definitions
+// Type Definitions
 export type EnvVarDefinition = {
     type: 'boolean' | 'string' | 'number' | 'enum' | 'path' | 'url';
     description: string;
