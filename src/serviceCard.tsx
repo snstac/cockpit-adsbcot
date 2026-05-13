@@ -65,7 +65,11 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
                 }
             } catch {
                 if (!cancelled) {
-                    setError(_('Failed to get service status.'));
+                    setError(
+                        _(
+                            'Could not read service status from systemd (permission denied or no D-Bus). Service controls are disabled.'
+                        )
+                    );
                     setActiveState(null);
                 }
             }
@@ -80,13 +84,21 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
 
     async function runCtl(action: string, label: string) {
         try {
-            await cockpit.spawn(['systemctl', action, serviceName], { superuser: 'try' });
+            await cockpit.spawn(
+                ['systemctl', action, `${serviceName}.service`],
+                { superuser: 'try', err: 'message' }
+            );
             onToast({ variant: 'success', title: _('Completed: {0}').replace('{0}', label) });
         } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e);
+            let detail = e instanceof Error ? e.message : String(e);
+            if (/(\bcode \b4\b|exit status 4|exited with code 4)/i.test(detail)) {
+                detail = _(
+                    'Unit {0}.service was not found. Install the adsbcot package (or create the unit), then refresh this page.'
+                ).replace('{0}', serviceName);
+            }
             onToast({
                 variant: 'danger',
-                title: _('Failed: {0}').replace('{0}', label) + (msg ? ` (${msg})` : ''),
+                title: _('Failed: {0}').replace('{0}', label) + (detail ? `: ${detail}` : ''),
             });
         }
     }
@@ -99,6 +111,9 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
         return 'gray';
     }
 
+    const unitNotFound = loadState === 'not-found';
+    const controlsDisabled = !!error || unitNotFound;
+
     return (
         <Card data-testid="adsbcot-service-card">
             <CardTitle>
@@ -106,6 +121,17 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
             </CardTitle>
             <CardBody>
                 {error && <Alert variant="danger" title={error} />}
+
+                {unitNotFound && !error && (
+                    <Alert
+                        variant="warning"
+                        title={_('ADSBCOT service unit is not installed')}
+                    >
+                        {_(
+                            'systemd has no {0}.service. Install the adsbcot package on this machine (see documentation), run daemon-reload if you added a unit file, then refresh this page.'
+                        ).replace('{0}', serviceName)}
+                    </Alert>
+                )}
 
                 {!error && (
                     <CardTitle>
@@ -136,6 +162,7 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
                         <button
                             type="button"
                             className="pf-c-button pf-m-primary"
+                            disabled={controlsDisabled}
                             onClick={() => runCtl('start', _('Start'))}
                         >
                             {_('Start')}
@@ -143,6 +170,7 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
                         <button
                             type="button"
                             className="pf-c-button pf-m-secondary"
+                            disabled={controlsDisabled}
                             onClick={() => runCtl('stop', _('Stop'))}
                         >
                             {_('Stop')}
@@ -150,6 +178,7 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
                         <button
                             type="button"
                             className="pf-m-secondary pf-c-button"
+                            disabled={controlsDisabled}
                             onClick={() => runCtl('restart', _('Restart'))}
                         >
                             {_('Restart')}
@@ -157,6 +186,7 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
                         <button
                             type="button"
                             className="pf-c-button pf-m-secondary"
+                            disabled={controlsDisabled}
                             onClick={() => runCtl('enable', _('Enable'))}
                         >
                             {_('Enable')}
@@ -164,6 +194,7 @@ export function ServiceManagementCard({ serviceName, onToast }: ServiceManagemen
                         <button
                             type="button"
                             className="pf-c-button pf-m-secondary"
+                            disabled={controlsDisabled}
                             onClick={() => runCtl('disable', _('Disable'))}
                         >
                             {_('Disable')}
