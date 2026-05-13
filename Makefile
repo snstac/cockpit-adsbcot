@@ -1,7 +1,12 @@
 # extract name from package.json
 PACKAGE_NAME := $(shell awk '/"name":/ {gsub(/[",]/, "", $$2); print $$2}' package.json)
 RPM_NAME := cockpit-$(PACKAGE_NAME)
-VERSION := $(shell T=$$(git describe --tags 2>/dev/null | sed s/^v//) || T=1; echo $$T | tr '-' '.')
+# Do not use "git describe | sed" alone: if describe fails, sed still exits 0 and T stays empty.
+VERSION_RAW := $(shell \
+	T=$$(git describe --tags 2>/dev/null | sed 's/^v//'); \
+	if [ -z "$$T" ]; then T=1; fi; \
+	echo "$$T" | tr '-' '.')
+VERSION := $(if $(strip $(VERSION_RAW)),$(VERSION_RAW),1)
 ifeq ($(TEST_OS),)
 TEST_OS = centos-9-stream
 endif
