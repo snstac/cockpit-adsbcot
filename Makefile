@@ -223,7 +223,8 @@ deb:
 	sed -i "s/1.0.0/$(VERSION)/g" "`pwd`/output/cockpit-$(PACKAGE_NAME)/DEBIAN/control"
 	chmod 755 "`pwd`/output/cockpit-$(PACKAGE_NAME)/DEBIAN/control"
 	dpkg-deb -Zxz --build output/cockpit-$(PACKAGE_NAME)
-	mv "`pwd`/output/cockpit-$(PACKAGE_NAME).deb" "`pwd`/"
+	mv "`pwd`/output/cockpit-$(PACKAGE_NAME).deb" \
+		"`pwd`/$(RPM_NAME)_$(VERSION)_all.deb"
 	rm -r "`pwd`/output"
 
 
