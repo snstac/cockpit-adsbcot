@@ -80,7 +80,9 @@ function StatusOutput({ serviceName }: { serviceName: string }) {
 
 export const Application: React.FC = () => {
     const [fileLines, setFileLines] = useState<DefaultEnvLine[]>([]);
-    const [envVarForm, setEnvVarForm] = useState<Record<string, string>>(defaultForm);
+    const [envVarForm, setEnvVarForm] = useState<Record<string, string>>(() =>
+        defaultFormFromConf(CONF_PARAMS)
+    );
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
     const [configFileContents, setConfigFileContents] = useState<string>('');
     const [configLoadError, setConfigLoadError] = useState<string | null>(null);
