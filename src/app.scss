@@ -34,18 +34,19 @@
 
 /* GPSTAK-style AryaOS operations console polish. */
 :root {
-    color-scheme: light;
-    --aos-bg: #eef1f0;
-    --aos-panel: #fbfdfc;
-    --aos-ink: #122322;
-    --aos-muted: #53615f;
-    --aos-border: rgb(21 48 47 / 18%);
-    --aos-border-strong: rgb(21 48 47 / 35%);
-    --aos-accent: #1f6f62;
-    --aos-accent-dark: #164d45;
-    --aos-accent-ink: #f2fff8;
-    --aos-danger: #b42318;
-    --aos-ok: #257a4a;
+    color-scheme: dark;
+    --aos-bg: #071211;
+    --aos-panel: #122322;
+    --aos-panel-2: #172c2a;
+    --aos-ink: #edf7f4;
+    --aos-muted: #9bb2ad;
+    --aos-border: rgb(124 170 160 / 28%);
+    --aos-border-strong: rgb(124 170 160 / 40%);
+    --aos-accent: #35a58f;
+    --aos-accent-dark: #6ed4be;
+    --aos-accent-ink: #071211;
+    --aos-danger: #ff8a7a;
+    --aos-ok: #74d8a4;
 }
 
 * {
@@ -61,7 +62,7 @@ body,
 body {
     margin: 0;
     background:
-        linear-gradient(180deg, rgb(12 31 31 / 8%), rgb(12 31 31 / 0%) 18rem),
+        linear-gradient(180deg, rgb(53 165 143 / 16%), rgb(7 18 17 / 0%) 18rem),
         var(--aos-bg);
     color: var(--aos-ink);
     font-family: RedHatText, "Open Sans", Helvetica, Arial, sans-serif;
@@ -86,7 +87,7 @@ p {
     background: var(--aos-panel);
     border: 1px solid var(--aos-border);
     border-radius: 8px;
-    box-shadow: 0 10px 28px rgb(14 29 31 / 8%);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 32%);
 }
 
 .pf-v6-c-card__title,
@@ -115,7 +116,7 @@ p {
 
 .pf-v6-c-data-list__item,
 .pf-c-data-list__item {
-    border-block-end: 1px solid rgb(21 48 47 / 12%);
+    border-block-end: 1px solid rgb(124 170 160 / 18%);
 }
 
 .pf-v6-c-data-list__cell,
@@ -155,7 +156,7 @@ button.pf-m-primary {
 .pf-c-button.pf-m-secondary,
 button.pf-m-secondary {
     border-color: var(--aos-accent);
-    background-color: var(--aos-panel) !important;
+    background-color: var(--aos-panel-2) !important;
     color: var(--aos-accent-dark) !important;
 }
 
@@ -174,7 +175,7 @@ textarea {
     padding: 0.55rem 0.65rem;
     border: 1px solid var(--aos-border-strong);
     border-radius: 5px;
-    background-color: var(--aos-panel) !important;
+    background-color: var(--aos-panel-2) !important;
     color: var(--aos-ink) !important;
 }
 
@@ -189,7 +190,7 @@ pre {
     overflow: auto;
     background: var(--aos-panel) !important;
     color: var(--aos-ink) !important;
-    border: 1px solid rgb(21 48 47 / 22%);
+    border: 1px solid rgb(124 170 160 / 28%);
     border-radius: 6px !important;
 }
 
@@ -199,7 +200,7 @@ pre {
     gap: 0.75rem;
     align-items: center;
     background: var(--aos-panel);
-    border-top-color: rgb(21 48 47 / 14%);
+    border-top-color: rgb(124 170 160 / 18%);
 }
 
 .adsbcot-config-actions .pf-v6-c-check,
