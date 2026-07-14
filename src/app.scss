@@ -135,10 +135,12 @@ label div {
     line-height: 1.45;
 }
 
+/* Touch targets sized for gloved field use (>=48px on all controls). */
 .pf-v6-c-button,
 .pf-c-button,
 button {
-    min-height: 2.25rem;
+    min-height: 3rem;
+    padding-inline: 1.2rem;
     border-radius: 5px;
     font-weight: 650;
 }
@@ -172,6 +174,7 @@ select,
 textarea {
     width: min(100%, 34rem) !important;
     max-width: 100%;
+    min-height: 3rem;
     padding: 0.55rem 0.65rem;
     border: 1px solid var(--aos-border-strong);
     border-radius: 5px;
@@ -188,7 +191,7 @@ code {
 pre {
     max-width: 100%;
     overflow: auto;
-    background: var(--aos-panel) !important;
+    background: var(--aos-panel-2) !important;
     color: var(--aos-ink) !important;
     border: 1px solid rgb(124 170 160 / 28%);
     border-radius: 6px !important;
