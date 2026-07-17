@@ -22,16 +22,18 @@ import { Checkbox } from '@patternfly/react-core';
 
 import cockpit from 'cockpit';
 
-import { CONF_PARAMS } from './conf';
 import {
     type DefaultEnvLine,
+    ServiceManagementCard,
+    TlsUploadCard,
+    type ToastMessage,
     defaultFormFromConf,
     mergeFormValues,
     parseEnvDefault,
     serializeEnvDefault,
-} from './envDefaultFile';
-import { ServiceManagementCard, type ToastMessage } from './serviceCard';
-import { TlsUploadCard } from './tlsCard';
+} from '@snstac/cockpit-shared';
+
+import { CONF_PARAMS } from './conf';
 
 const _ = cockpit.gettext;
 
@@ -137,7 +139,7 @@ export const Application: React.FC = () => {
             loadFromDisk();
         });
         return () => {
-            if (watcher && typeof watcher.close === 'function') watcher.close();
+            if (watcher && typeof watcher.remove === 'function') watcher.remove();
         };
     }, [loadFromDisk]);
 
@@ -180,7 +182,7 @@ export const Application: React.FC = () => {
                 return;
             }
 
-            const newConfig = serializeEnvDefault(fileLines, envVarForm, CONF_PARAMS);
+            const newConfig = serializeEnvDefault(fileLines, envVarForm, CONF_PARAMS, '# Added by Cockpit ADSBCOT');
             setSaveBusy(true);
             try {
                 await cockpit
@@ -309,7 +311,13 @@ export const Application: React.FC = () => {
 
             <ServiceManagementCard serviceName={SERVICE_NAME} onToast={setToast} />
 
-            <TlsUploadCard onToast={setToast} onInstalledPaths={onTlsInstalled} />
+            <TlsUploadCard
+                tlsDir="/etc/adsbcot/tls"
+                keyUser="adsbcot"
+                testIdPrefix="adsbcot"
+                onToast={setToast}
+                onInstalledPaths={onTlsInstalled}
+            />
 
             <Card
                 className="adsbcot-expandable-card"

@@ -1,4 +1,4 @@
-import { EnvVarDefinition } from './types';
+import { EnvVarDefinition } from '@snstac/cockpit-shared';
 
 export const CONF_PARAMS: Record<string, EnvVarDefinition> = {
 
