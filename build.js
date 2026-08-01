@@ -108,6 +108,22 @@ const context = await esbuild.context({
                     const destAssets = path.join('dist', 'assets');
                     fs.mkdirSync(destAssets, { recursive: true });
                     fs.cpSync(srcAssets, destAssets, { recursive: true });
+
+                    // AryaOS design-kit webfonts. theme.scss references these
+                    // as url(./fonts/*.woff2) relative to the stylesheet, and
+                    // *.woff2 is in `external` above, so esbuild leaves those
+                    // URLs untouched. If the files are not placed here the CSS
+                    // still loads and the palette still applies -- only the
+                    // typography silently falls back to system fonts, which is
+                    // easy to miss and was in fact missed on the first pass.
+                    const srcFonts = path.join(
+                        'node_modules', '@snstac', 'cockpit-shared', 'src', 'fonts'
+                    );
+                    if (fs.existsSync(srcFonts)) {
+                        const destFonts = path.join('dist', 'fonts');
+                        fs.mkdirSync(destFonts, { recursive: true });
+                        fs.cpSync(srcFonts, destFonts, { recursive: true });
+                    }
                 });
             }
         },

@@ -1,5 +1,9 @@
 @use "page.scss";
 
+// The AryaOS design kit: palette, type and spacing for every cockpit-*
+// plugin. Everything below inherits from it rather than redefining it.
+@use "@snstac/cockpit-shared/src/theme.scss";
+
 /* Spacing between stacked expandable cards only — do not set overflow on the Card (breaks PF / scrolling). */
 .adsbcot-expandable-card {
     margin-top: 1rem;
@@ -32,22 +36,6 @@
     background: var(--pf-t--global--background--color--primary--default, var(--pf-c-card--BackgroundColor, #fff));
 }
 
-/* GPSTAK-style AryaOS operations console polish. */
-:root {
-    color-scheme: dark;
-    --aos-bg: #071211;
-    --aos-panel: #122322;
-    --aos-panel-2: #172c2a;
-    --aos-ink: #edf7f4;
-    --aos-muted: #9bb2ad;
-    --aos-border: rgb(124 170 160 / 28%);
-    --aos-border-strong: rgb(124 170 160 / 40%);
-    --aos-accent: #35a58f;
-    --aos-accent-dark: #6ed4be;
-    --aos-accent-ink: #071211;
-    --aos-danger: #ff8a7a;
-    --aos-ok: #74d8a4;
-}
 
 * {
     box-sizing: border-box;
