@@ -1,11 +1,9 @@
-import { fileURLToPath } from 'node:url';
-
 import { compile } from 'sass';
 import { describe, expect, test } from 'vitest';
 
 describe('Cockpit page layout', () => {
     test('provides a viewport-height root scroller', () => {
-        const css = compile(fileURLToPath(new URL('./app.scss', import.meta.url)), {
+        const css = compile('src/app.scss', {
             loadPaths: ['pkg/lib', 'node_modules'],
             quietDeps: true,
         }).css;
