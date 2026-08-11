@@ -47,6 +47,12 @@ body,
     block-size: 100%;
 }
 
+// Cockpit fixes the document body in place; plain-root plugins must provide
+// their own viewport scroller or expanded cards are clipped below the frame.
+#app {
+    overflow-y: auto;
+}
+
 body {
     margin: 0;
     background:

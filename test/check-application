@@ -19,6 +19,12 @@ class TestApplication(testlib.MachineCase):
         b.wait_visible("[data-testid=adsbcot-tls-card]")
         b.wait_visible("[data-testid=adsbcot-config-card]")
 
+        b.set_layout("medium")
+        b.click("#adsbcot-debug-expand")
+        b.wait_js_cond("document.querySelector('#app').scrollHeight > document.querySelector('#app').clientHeight")
+        b.eval_js("document.querySelector('#app').scrollTop = document.querySelector('#app').scrollHeight")
+        b.wait_js_cond("document.querySelector('#app').scrollTop > 0")
+
 
 if __name__ == '__main__':
     testlib.test_main()
